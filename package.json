@@ -1,0 +1,29 @@
+{
+  "name": "projectavalon",
+  "version": "1.0.0",
+  "description": "This is a beta version for a covid-19 twitter bot",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pedro-Mendes/projectAvalon.git"
+  },
+  "keywords": [
+    "coronga",
+    "covid-19",
+    "deasese",
+    "bot",
+    "twitter"
+  ],
+  "author": "pedro-mendes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pedro-Mendes/projectAvalon/issues"
+  },
+  "homepage": "https://github.com/Pedro-Mendes/projectAvalon#readme",
+  "dependencies": {
+    "twit": "^2.2.11"
+  }
+}
