@@ -1,6 +1,7 @@
-console.log('Starting bot')
+const dotenv = require('dotenv');
 
-var config = require('./config')
-var twit = require('twit')
+dotenv.config();
+const Twit = require('twit');
+const config = require('./config');
 
-var T = new Twit({config})
+let T = new Twit(config);

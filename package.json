@@ -4,7 +4,9 @@
   "description": "This is a beta version for a covid-19 twitter bot",
   "main": "bot.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node bot.js",
+    "lint": "eslint --ignore-path .gitignore .",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,13 @@
   },
   "homepage": "https://github.com/Pedro-Mendes/projectAvalon#readme",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "twit": "^2.2.11"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "jest": "^25.1.0"
   }
 }
