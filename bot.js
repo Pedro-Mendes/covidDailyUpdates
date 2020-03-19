@@ -1,4 +1,6 @@
-/* https://rapidapi.com/KishCom/api/covid-19-coronavirus-statistics */
+/* https://rapidapi.com/KishCom/api/covid-19-coronavirus-statistics 
+https://www.youtube.com/user/shiffman
+*/
 const dotenv = require('dotenv');
 const axios = require('axios');
 
@@ -48,4 +50,4 @@ function scheduledTweet() {
 }
 
 scheduledTweet();
-setInterval(scheduledTweet, 1000 * 60 * 60);
+setInterval(scheduledTweet, 1000 * 60 * 60 * 3);
