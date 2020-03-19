@@ -30,6 +30,7 @@
     "twit": "^2.2.11"
   },
   "devDependencies": {
+    "axios": "^0.19.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.1",
