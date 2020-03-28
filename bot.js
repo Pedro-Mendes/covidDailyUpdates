@@ -6,9 +6,10 @@ const axios = require('axios');
 
 dotenv.config();
 const Twit = require('twit');
-const config = require('./config');
+const TwitterLite = require('twitter-lite');
 
-const T = new Twit(config);
+const config = require('./config');
+const configLite = require('./configLite');
 
 function tweeted(err, data, response) {
   if (err) {
@@ -36,6 +37,20 @@ function getCorona() {
       console.log('Error with response: ', error);
     });
 }
+
+function postTweet(tweet) {
+  let T = new TwitterLite(configLite);
+  T.post('statuses/update', { status: tweet.status })
+    .then(() => console.log('Success!'))
+    .catch((errLite) => {
+      console.log('Err in twitter-lite:', errLite);
+      T = new Twit(config);
+      T.post('statuses/update', tweet, tweeted)
+        .then(() => console.log('Success!'))
+        .catch((err) => console.log('Err in twit:', err));
+    });
+}
+
 function scheduledTweet() {
   const date = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
   let confirmedCases;
@@ -45,9 +60,16 @@ function scheduledTweet() {
       const tweet = {
         status: `${date}\n Brazil confirmed cases: ${confirmedCases}`,
       };
-      T.post('statuses/update', tweet, tweeted);
+      postTweet(tweet);
     });
 }
 
+/* function scheduleTweetLite() {
+  const T = new TwitterLite(configLite);
+  T.post('statuses/update', { status: 'Hello, Worldfd!' })
+    .then(() => console.log('Success!'))
+    .catch((err) => console.log('Error: ', err));
+} */
+
 scheduledTweet();
-setInterval(scheduledTweet, 1000 * 60 * 60 * 3);
+setInterval(scheduledTweet, 1000 * 60 * 60 * 1);
