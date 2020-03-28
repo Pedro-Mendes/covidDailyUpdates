@@ -1,4 +1,5 @@
 /* https://rapidapi.com/KishCom/api/covid-19-coronavirus-statistics
+https://rapidapi.com/astsiatsko/api/coronavirus-monitor
 https://www.youtube.com/user/shiffman
 */
 const dotenv = require('dotenv');
@@ -22,14 +23,11 @@ function tweeted(err, data, response) {
 function getCorona() {
   return axios({
     method: 'GET',
-    url: 'https://covid-19-coronavirus-statistics.p.rapidapi.com/v1/stats',
+    url: 'https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_country.php',
     headers: {
       'content-type': 'application/octet-stream',
-      'x-rapidapi-host': 'covid-19-coronavirus-statistics.p.rapidapi.com',
+      'x-rapidapi-host': 'coronavirus-monitor.p.rapidapi.com',
       'x-rapidapi-key': 'f3aaada3fdmsh01752c4dfa674acp12ea76jsnfe30e4023c44',
-    },
-    params: {
-      country: 'Brazil',
     },
   })
     .then((response) => response.data)
@@ -57,12 +55,17 @@ function scheduledTweet() {
   /*const date = new Date();
   let formattedDate = new Date(date.valueOf() - date.getTimezoneOffset() * 60000);
   formattedDate = formattedDate.toISOString().replace(/\.\d{3}Z$/, ''); */
-  let confirmedCases;
   getCorona()
     .then((res) => {
-      confirmedCases = res.data.covid19Stats[0].confirmed;
+      const allCountries = res.countries_stat;
+      const Brazil = allCountries.filter((report) => report.country_name === 'Brazil');
+      const Italy = allCountries.filter((report) => report.country_name === 'Italy');
+      const Iran = allCountries.filter((report) => report.country_name === 'Iran');
+      const USA = allCountries.filter((report) => report.country_name === 'USA');
+      const China = allCountries.filter((report) => report.country_name === 'China');
+
       const tweet = {
-        status: `${date} Brazil confirmed cases: ${confirmedCases}`,
+        status: `${date}\nConfirmed cases:\n\nBrazil - ${Brazil[0].cases}\nItaly -  ${Italy[0].cases}\nIran - ${Iran[0].cases}\nUSA - ${USA[0].cases}\nChina - ${China[0].cases}`,
       };
       postTweet(tweet);
     });
