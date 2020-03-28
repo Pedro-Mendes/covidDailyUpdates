@@ -49,24 +49,28 @@ function postTweet(tweet) {
     });
 }
 
+function stringToFloat(string) {
+  return parseFloat(string.replace(',', ''), 10);
+}
+
 function scheduledTweet() {
-  const date = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
-  // eslint-disable-next-line spaced-comment
-  /*const date = new Date();
-  let formattedDate = new Date(date.valueOf() - date.getTimezoneOffset() * 60000);
-  formattedDate = formattedDate.toISOString().replace(/\.\d{3}Z$/, ''); */
   getCorona()
     .then((res) => {
+      const formatedData = [];
+      const tweet = { status: 'Confirmed cases:\n' };
+      const countryList = ['Brazil', 'Italy', 'Iran', 'USA', 'China', 'Spain', 'Germany', 'France', 'UK', 'Canada', 'Portugal', 'Australia', 'Argentina', 'Venezuela', 'Switzerland', 'S. Korea'];
       const allCountries = res.countries_stat;
-      const Brazil = allCountries.filter((report) => report.country_name === 'Brazil');
-      const Italy = allCountries.filter((report) => report.country_name === 'Italy');
-      const Iran = allCountries.filter((report) => report.country_name === 'Iran');
-      const USA = allCountries.filter((report) => report.country_name === 'USA');
-      const China = allCountries.filter((report) => report.country_name === 'China');
-
-      const tweet = {
-        status: `${date}\nConfirmed cases:\n\nBrazil - ${Brazil[0].cases}\nItaly -  ${Italy[0].cases}\nIran - ${Iran[0].cases}\nUSA - ${USA[0].cases}\nChina - ${China[0].cases}`,
-      };
+      countryList.forEach((name) => {
+        const countryData = allCountries.filter((report) => report.country_name === name);
+        formatedData.push({
+          country: countryData[0].country_name,
+          cases: countryData[0].cases,
+        });
+      });
+      formatedData.sort((a, b) => ((stringToFloat(a.cases) > stringToFloat(b.cases)) ? 1 : -1));
+      formatedData.forEach((data) => {
+        tweet.status += `\n${data.country} - ${data.cases}`;
+      });
       postTweet(tweet);
     });
 }
