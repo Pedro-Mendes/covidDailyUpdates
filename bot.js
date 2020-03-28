@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* https://rapidapi.com/KishCom/api/covid-19-coronavirus-statistics
 https://rapidapi.com/astsiatsko/api/coronavirus-monitor
 https://www.youtube.com/user/shiffman
