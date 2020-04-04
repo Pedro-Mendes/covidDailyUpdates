@@ -11,6 +11,7 @@ const path = require('path');
 
 dotenv.config();
 const URL = 'https://coronavirus-monitor.p.rapidapi.com/coronavirus/';
+const countryList = ['Brazil', 'Italy', 'Iran', 'USA', 'China', 'Spain', 'Germany', 'France', 'UK', 'Canada', 'Portugal', 'Australia', 'Argentina', 'Venezuela', 'S. Korea', 'Ecuador'];
 
 const Twit = require('twit');
 const TwitterLite = require('twitter-lite');
@@ -92,7 +93,6 @@ const functionArray = [
     const res = await getCorona(axiosConfig);
     const formatedData = [];
     const tweet = { status: 'Confirmed cases:\n' };
-    const countryList = ['Brazil', 'Italy', 'Iran', 'USA', 'China', 'Spain', 'Germany', 'France', 'UK', 'Canada', 'Portugal', 'Australia', 'Argentina', 'Venezuela', 'Switzerland', 'S. Korea'];
     const allCountries = res.countries_stat;
     countryList.forEach((name) => {
       const countryData = allCountries.filter((report) => report.country_name === name);
@@ -114,7 +114,6 @@ const functionArray = [
     const res = await getCorona(axiosConfig);
     const formatedData = [];
     const tweet = { status: 'Confirmed deaths:\n' };
-    const countryList = ['Brazil', 'Italy', 'Iran', 'USA', 'China', 'Spain', 'Germany', 'France', 'UK', 'Canada', 'Portugal', 'Australia', 'Argentina', 'Venezuela', 'Switzerland', 'S. Korea'];
     const allCountries = res.countries_stat;
     countryList.forEach((name) => {
       const countryData = allCountries.filter((report) => report.country_name === name);
@@ -136,7 +135,6 @@ const functionArray = [
     const res = await getCorona(axiosConfig);
     const formatedData = [];
     const tweet = { status: 'Recovered cases:\n' };
-    const countryList = ['Brazil', 'Italy', 'Iran', 'USA', 'China', 'Spain', 'Germany', 'France', 'UK', 'Canada', 'Portugal', 'Australia', 'Argentina', 'Venezuela', 'Switzerland', 'S. Korea'];
     const allCountries = res.countries_stat;
     countryList.forEach((name) => {
       const countryData = allCountries.filter((report) => report.country_name === name);
