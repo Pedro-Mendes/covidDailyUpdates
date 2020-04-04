@@ -21,8 +21,8 @@ const configLite = require('./configLite');
 
 const T = new Twit(config);
 const TLite = new TwitterLite(configLite);
+
 const axiosConfig = {
-  url: 'https://coronavirus-monitor.p.rapidapi.com/coronavirus/',
   method: 'GET',
   headers: {
     'x-rapidapi-host': 'coronavirus-monitor.p.rapidapi.com',
@@ -45,6 +45,13 @@ async function getCorona(conf) {
   return response.data;
 }
 
+async function getCasesByCountry() {
+  axiosConfig.url = `${URL}cases_by_country.php`;
+  axiosConfig.responseType = '';
+  const response = await getCorona(axiosConfig);
+  return response.countries_stat;
+}
+
 function postTweet(tweet) {
   TLite.post('statuses/update', { status: tweet.status })
     .then(() => console.log('Success!'))
@@ -57,7 +64,7 @@ function postTweet(tweet) {
 }
 
 function stringToFloat(string) {
-  return parseFloat(string.replace(',', ''), 10);
+  return parseFloat(string.replace(',', ''));
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -86,67 +93,39 @@ async function randomMask64() {
   });
 }
 
+function createTweetObject(allCountries, information, informationText) {
+  const tweet = { status: informationText };
+  const formatedData = [];
+  countryList.forEach((name) => {
+    const countryData = allCountries.filter((report) => report.country_name === name);
+    formatedData.push({
+      country: countryData[0].country_name,
+      info: countryData[0][information],
+    });
+  });
+  formatedData.sort((a, b) => ((stringToFloat(a.info) > stringToFloat(b.info)) ? 1 : -1));
+  formatedData.forEach((data) => {
+    tweet.status += `\n${data.country} - ${data.info}`;
+  });
+  return tweet;
+}
+
 const functionArray = [
   async function confirmedCases() {
-    axiosConfig.url = `${URL}cases_by_country.php`;
-    axiosConfig.responseType = '';
-    const res = await getCorona(axiosConfig);
-    const formatedData = [];
-    const tweet = { status: 'Confirmed cases:\n' };
-    const allCountries = res.countries_stat;
-    countryList.forEach((name) => {
-      const countryData = allCountries.filter((report) => report.country_name === name);
-      formatedData.push({
-        country: countryData[0].country_name,
-        cases: countryData[0].cases,
-      });
-    });
-    formatedData.sort((a, b) => ((stringToFloat(a.cases) > stringToFloat(b.cases)) ? 1 : -1));
-    formatedData.forEach((data) => {
-      tweet.status += `\n${data.country} - ${data.cases}`;
-    });
+    const allCountries = await getCasesByCountry();
+    const tweet = createTweetObject(allCountries, 'cases', 'Confirmed cases:\n');
     console.log(tweet.status);
     postTweet(tweet);
   },
   async function deathNumbers() {
-    axiosConfig.url = `${URL}cases_by_country.php`;
-    axiosConfig.responseType = '';
-    const res = await getCorona(axiosConfig);
-    const formatedData = [];
-    const tweet = { status: 'Confirmed deaths:\n' };
-    const allCountries = res.countries_stat;
-    countryList.forEach((name) => {
-      const countryData = allCountries.filter((report) => report.country_name === name);
-      formatedData.push({
-        country: countryData[0].country_name,
-        deaths: countryData[0].deaths,
-      });
-    });
-    formatedData.sort((a, b) => ((stringToFloat(a.deaths) > stringToFloat(b.deaths)) ? 1 : -1));
-    formatedData.forEach((data) => {
-      tweet.status += `\n${data.country} - ${data.deaths}`;
-    });
+    const allCountries = await getCasesByCountry();
+    const tweet = createTweetObject(allCountries, 'deaths', 'Confirmed deaths:\n');
     console.log(tweet.status);
     postTweet(tweet);
   },
   async function recoveredCases() {
-    axiosConfig.url = `${URL}cases_by_country.php`;
-    axiosConfig.responseType = '';
-    const res = await getCorona(axiosConfig);
-    const formatedData = [];
-    const tweet = { status: 'Recovered cases:\n' };
-    const allCountries = res.countries_stat;
-    countryList.forEach((name) => {
-      const countryData = allCountries.filter((report) => report.country_name === name);
-      formatedData.push({
-        country: countryData[0].country_name,
-        total_recovered: countryData[0].total_recovered,
-      });
-    });
-    formatedData.sort((a, b) => ((stringToFloat(a.total_recovered) > stringToFloat(b.total_recovered)) ? 1 : -1));
-    formatedData.forEach((data) => {
-      tweet.status += `\n${data.country} - ${data.total_recovered}`;
-    });
+    const allCountries = await getCasesByCountry();
+    const tweet = createTweetObject(allCountries, 'total_recovered', 'Recovered cases:\n');
     console.log(tweet.status);
     postTweet(tweet);
   },
@@ -156,8 +135,12 @@ const functionArray = [
   },
 ];
 
-setInterval(async () => {
+async function test() {
+  return functionArray[0]();
+}
+test();
+/* setInterval(async () => {
   await functionArray[iteration]();
   iteration += 1;
   iteration %= functionArray.length;
-}, 1000 * 60 * 60 * 3);
+}, 1000 * 60 * 60 * 3); */
