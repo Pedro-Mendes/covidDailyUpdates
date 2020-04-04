@@ -74,7 +74,7 @@ function uploaded(err, data, response) {
   T.post('statuses/update', tweet, tweeted);
 }
 
-async function randomMask64() {
+async function getRandomMask64() {
   const pathFile = path.resolve(__dirname, 'images', 'maskTmp.jpg');
   const writer = fs.createWriteStream(pathFile);
 
@@ -127,7 +127,7 @@ const functionArray = [
     postTweet(tweet);
   },
   async function postImage() {
-    const b64content = await randomMask64();
+    const b64content = await getRandomMask64();
     T.post('media/upload', { media_data: b64content }, uploaded);
   },
 ];
