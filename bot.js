@@ -114,19 +114,16 @@ const functionArray = [
   async function confirmedCases() {
     const allCountries = await getCasesByCountry();
     const tweet = createTweetObject(allCountries, 'cases', 'Confirmed cases:\n');
-    console.log(tweet.status);
     postTweet(tweet);
   },
   async function deathNumbers() {
     const allCountries = await getCasesByCountry();
     const tweet = createTweetObject(allCountries, 'deaths', 'Confirmed deaths:\n');
-    console.log(tweet.status);
     postTweet(tweet);
   },
   async function recoveredCases() {
     const allCountries = await getCasesByCountry();
     const tweet = createTweetObject(allCountries, 'total_recovered', 'Recovered cases:\n');
-    console.log(tweet.status);
     postTweet(tweet);
   },
   async function postImage() {
@@ -135,12 +132,8 @@ const functionArray = [
   },
 ];
 
-async function test() {
-  return functionArray[0]();
-}
-test();
-/* setInterval(async () => {
+setInterval(async () => {
   await functionArray[iteration]();
   iteration += 1;
   iteration %= functionArray.length;
-}, 1000 * 60 * 60 * 3); */
+}, 1000 * 60 * 60 * 3);
