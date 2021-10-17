@@ -26,18 +26,18 @@
   },
   "homepage": "https://github.com/Pedro-Mendes/projectAvalon#readme",
   "dependencies": {
+    "axios": "^0.19.2",
     "dotenv": "^8.2.0",
-    "twit": "^2.2.11"
+    "twit": "^2.2.11",
+    "twitter-lite": "^0.9.4"
   },
   "devDependencies": {
-    "axios": "^0.19.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.1",
     "forever": "^2.0.0",
     "jest": "^25.1.0",
     "node-base64-image": "^1.0.7",
-    "npm": "^6.14.4",
-    "twitter-lite": "^0.9.4"
+    "npm": "^6.14.4"
   }
 }
