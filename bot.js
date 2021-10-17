@@ -46,7 +46,7 @@ async function getCorona(conf) {
 }
 
 async function getCasesByCountry() {
-  axiosConfig.url = `${URL}cases_by_country.php`;
+  axiosConfig.url = `${URL}/cases_by_country.php`;
   axiosConfig.responseType = '';
   const response = await getCorona(axiosConfig);
   return response.countries_stat;
@@ -78,7 +78,7 @@ async function getRandomMask64() {
   const pathFile = path.resolve(__dirname, 'images', 'maskTmp.jpg');
   const writer = fs.createWriteStream(pathFile);
 
-  axiosConfig.url = `${URL}random_masks_usage_instructions.php`;
+  axiosConfig.url = `${URL}/random_masks_usage_instructions.php`;
   axiosConfig.responseType = 'stream';
 
   const response = await getCorona(axiosConfig);
