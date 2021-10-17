@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 
 dotenv.config();
-const URL = 'https://coronavirus-monitor.p.rapidapi.com/coronavirus/';
+const URL = process.env.CORONAVIRUS_MONITOR_URL;
 const countryList = ['Brazil', 'Italy', 'Iran', 'USA', 'China', 'Spain', 'Germany', 'France', 'UK', 'Canada', 'Portugal', 'Australia', 'Argentina', 'Venezuela', 'S. Korea', 'Ecuador'];
 
 const Twit = require('twit');
@@ -25,8 +25,8 @@ const TLite = new TwitterLite(configLite);
 const axiosConfig = {
   method: 'GET',
   headers: {
-    'x-rapidapi-host': 'coronavirus-monitor.p.rapidapi.com',
-    'x-rapidapi-key': 'f3aaada3fdmsh01752c4dfa674acp12ea76jsnfe30e4023c44',
+    'x-rapidapi-host': process.env.CORONAVIRUS_MONITOR_HOST,
+    'x-rapidapi-key': process.env.CORONAVIRUS_MONITOR_KEY,
   },
 };
 
@@ -46,7 +46,7 @@ async function getCorona(conf) {
 }
 
 async function getCasesByCountry() {
-  axiosConfig.url = `${URL}cases_by_country.php`;
+  axiosConfig.url = `${URL}/cases_by_country.php`;
   axiosConfig.responseType = '';
   const response = await getCorona(axiosConfig);
   return response.countries_stat;
@@ -78,7 +78,7 @@ async function getRandomMask64() {
   const pathFile = path.resolve(__dirname, 'images', 'maskTmp.jpg');
   const writer = fs.createWriteStream(pathFile);
 
-  axiosConfig.url = `${URL}random_masks_usage_instructions.php`;
+  axiosConfig.url = `${URL}/random_masks_usage_instructions.php`;
   axiosConfig.responseType = 'stream';
 
   const response = await getCorona(axiosConfig);
